@@ -1,30 +1,40 @@
-var Person = require("./PersonFactory")
-class TeacherFactory{
-    constructor(rating, yearsTeaching){
-        this.rating = rating;
-        this.yearsTeaching = yearsTeaching
-    }
+var Person = require("./PersonFactory");
+var PersonFactory = new Person();
+class Teacher extends Person {
+  constructor(role = "Teacher", name, age, rating, yearsTeaching) {
+    this.role = role;
+    this.name = name;
+    this.age = +age;
+    this.rating = +rating;
+    this.yearsTeaching = +yearsTeaching;
+    this.qualifiedTeacher = new Object();
+    this.tenuredTeacher = new Object();
+  }
 
-    qualifiedTeacher(){
-        if(+this.rating >= 90){
-            return {"qualifiedTeacher": true}
-        }
-        else{
-            return {"qualifiedTeacher": false}
-        }
+  checkQualifiedTeacher() {
+    if (this.rating >= 90) {
+      return (this.qualifiedTeacher = { qualifiedTeacher: true });
+    } else {
+      return (this.qualifiedTeacher = { qualifiedTeacher: false });
     }
-    seniorTeacher(){
-        if(+this.yearsTeaching >= 20){
-            return {"seniorTeacher": true}
-        }
-        else{
-            return {"seniorTeacher": false}
-        }
+  }
+  checkTenuredTeacher() {
+    if (this.yearsTeaching >= 20) {
+      return (this.tenuredTeacher = { tenuredTeacher: true });
+    } else {
+      return (this.tenuredTeacher = { tenuredTeacher: false });
     }
+  }
 
-    add(){
-        Person.generate(this.qualifiedTeacher(), this.seniorTeacher())
-    }
+  add() {
+    return PersonFactory.generate(
+      this.role,
+      this.name,
+      this.age,
+      this.qualifiedTeacher,
+      this.tenuredTeacher
+    );
+  }
 }
 
-module.exprots = new TeacherFactory()
+module.exports = Teacher;

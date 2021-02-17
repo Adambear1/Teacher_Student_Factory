@@ -1,20 +1,17 @@
-Array.prototype.count = function(array){
-    array.reduce(function (acc, curr) {
-        if (typeof acc[curr] == "undefined") {
-          acc[curr] = 1;
-        } else {
-          acc[curr] += 1;
-        }
+Array.prototype.count = function (array) {
+  array.reduce(function (acc, curr) {
+    if (typeof acc[curr] == "undefined") {
+      acc[curr] = 1;
+    } else {
+      acc[curr] += 1;
+    }
 
-        return acc;
-      }, {})
-}
+    return acc;
+  }, {});
+};
 
 class Person {
-  constructor(name, age, role, total = []) {
-    this.name = name;
-    this.age = age;
-    this.role = role;
+  constructor(total = []) {
     this.total = total;
   }
 
@@ -33,20 +30,33 @@ class Person {
     );
   }
   getTotal() {
-    return console.log(
-      count(total))
+    return console.log(count(total));
   }
 
-  generate(input_1 = null, input_2 = null) {
+  async generate(role, name, age, input_1 = null, input_2 = null) {
     var newObj = new Object();
-    if(input_1) this.total.push(input_1)
-    if(input_2) this.total.push(input_2)
-    newObj.name = this.name;
-    newObj.age = this.age;
-    newObj.role = this.role;
-    this.total.push(newObj);
-    return console.log(`Added ${newObj} \n\n The New List is Now: ${this.total}`)
+    if (input_1) {
+      await newObj.push(input_1);
+    }
+    if (input_2) {
+      await newObj.push(input_2);
+    }
+    newObj.name = await name;
+    newObj.age = await age;
+    newObj.role = await role;
+    try {
+      if (!newObj.name || !newObj.age || !newObj.role) {
+        new Error("Missing Entries");
+        return this.total.push(newObj);
+      }
+    } catch (error) {
+      break;
+    }
+  }
+
+  getAll() {
+    console.log(this.total);
   }
 }
 
-module.exports = new Person()
+module.exports = Person;
